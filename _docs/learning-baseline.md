@@ -1,228 +1,185 @@
-# Kiwi_Go Learning Baseline (Pre-Phase 00)
+# Kiwi_Go Learning Baseline (Universal)
 
-## Context Snapshot
+## Purpose
 
-- Starting point: **Phase 00**
-- Current project state: **no code yet**
-- Target architecture: **exact monorepo layout from `project-rules.md`**
-- Confirmed stack choices:
-  - Prisma ORM: **Yes**
-  - Socket.IO: **Yes**
-  - RTK / RTK Query: **Yes**
-  - OAuth providers in Phase 01: **Google + GitHub**
-  - Deployment target: **AWS**
-- Stated baseline for new tech: **0 experience**
-- Additional goal: solidify **TypeScript** and improve **Redux Toolkit** confidence
+This document is a reusable context handoff for new chats across all phases of the Kiwi_Go project.  
+It captures my current understanding, learning preferences, and agreed engineering mindset so each new phase can start fast without re-explaining everything.
 
 ---
 
-## Q&A Session 1 (Initial Baseline)
+## How To Use This In New Chats
 
-### Q1) Difference between HTTP and WebSocket?
+At the top of each new phase chat, include this file and fill in:
 
-**Your answer:**  
-HTTP is one-time request/response and closes; WebSocket stays open and allows two-way ongoing updates without re-requesting each time.
+- Current phase:
+- Completed scope:
+- Current goals:
+- Open blockers:
 
-**Tutor feedback:**  
-Correct and practical understanding.
-
----
-
-### Q2) Comfort with TypeScript strict typing?
-
-**Your answer:**  
-Recently completed TypeScript bootcamp; fairly comfortable conceptually, but little real project practice. Redux knowledge is older and less fresh.
-
-**Tutor feedback:**  
-Good conceptual base; needs repetition and real usage.
+Everything else below should remain mostly stable and only be updated when my understanding changes.
 
 ---
 
-### Q3) Docker experience?
+## Project Context (Stable)
 
-**Your answer:**  
-No real Docker experience yet.
-
-**Tutor feedback:**  
-Noted as beginner area for guided learning.
-
----
-
-### Q4) What is ORM migration?
-
-**Your answer:**  
-Know ORM acronym, not sure what migrations are.
-
-**Tutor explanation:**  
-A migration is a versioned, reproducible database schema change tracked in source control.
+- Project: real-time messaging platform (learning-focused, production-minded)
+- Architecture direction: monorepo
+- Stack commitments:
+  - React + TypeScript
+  - Node + Express
+  - Socket.IO
+  - Prisma + PostgreSQL
+  - Redis
+  - Redux Toolkit / RTK Query
+  - OAuth (Google + GitHub)
+  - Docker + AWS deployment path
+- Coding maturity goal: develop senior-level engineering thinking while building
 
 ---
 
-### Q5) OAuth vs JWT?
+## Learner Profile
 
-**Your answer:**  
-OAuth is login via provider (Google/GitHub/etc); JWT is session/auth token after login.
-
-**Tutor feedback:**  
-Correct mental model.
-
----
-
-### Q6) Current debugging process?
-
-**Your answer:**  
-Use console logs and trace data flow with hardcoded examples.
-
-**Tutor feedback:**  
-Good start; will level up with hypothesis-based debugging and observability.
+- Background: primarily PERN stack
+- New tech baseline: started from zero in Prisma, Redis, Docker, AWS, Socket.IO implementation
+- TypeScript: recently learned, needs real project repetition
+- Redux Toolkit: learned previously, currently less fresh than TypeScript
+- Preferred learning style: **small concept -> mini exercise -> reflection -> integration**
 
 ---
 
-### Q7) Preferred learning style?
+## Tutor Contract (How I Want To Be Guided)
 
-**Your answer:**  
-A) small concept -> mini exercise -> reflect.
-
-**Tutor feedback:**  
-Excellent fit for this project approach.
-
----
-
-## Q&A Session 2 (Concept Reinforcement)
-
-### Q1) Define Docker / Prisma / Socket.IO
-
-**Your answer (summary):**
-
-- Docker helps app run consistently across machines by packaging environment into image/container.
-- Prisma is a way to interact with DB without hand-writing all SQL.
-- Socket.IO adds reliability features on top of WebSockets (reconnect/fallback abstractions).
-
-**Tutor upgrades:**
-
-- Docker image is built from a recipe (`Dockerfile`), container is a running instance.
-- Node pinning is usually `.nvmrc` / Volta / engines (not only package.json).
-- Socket cleanup includes app-level cleanup (timers, presence state, listeners), not just socket disconnect.
+- Don’t give code unless I explicitly ask for code.
+- Teach with leading questions and hints, not just final answers.
+- Break work into small, testable steps.
+- Push me to reason about:
+  - trade-offs
+  - edge cases
+  - failure modes
+  - naming clarity
+  - testability
+- Reinforce senior principles consistently:
+  - DRY
+  - SRP
+  - KISS
+  - modular design
+- Prefer modular JS/TS patterns (pure functions, closures, ES modules), avoid class-heavy patterns by default.
 
 ---
 
-### Q2) Why strict typing helps?
+## Confirmed Understanding So Far
 
-**Your answer:**  
-Catches type errors early and reduces long-term bugs.
+### 1) HTTP vs WebSocket
 
-**Tutor feedback:**  
-Correct.
+- HTTP is request/response and typically short-lived per request.
+- WebSocket keeps a persistent connection for bidirectional real-time communication.
 
----
+### 2) Docker mental model
 
-### Q3) Why “works on my machine” happens and how Docker helps?
+- Docker helps make runtime behavior consistent across machines by packaging app/runtime/dependencies into an image and running it as a container.
+- Remaining growth: practical Docker workflow and debugging container issues.
 
-**Your answer:**  
-Version/tool/environment mismatches across machines; Docker packages dependencies/runtime environment for consistency.
+### 3) Prisma mental model
 
-**Tutor feedback:**  
-Correct.
+- Prisma is an ORM for typed database access.
+- Key concept learned: migrations are versioned schema changes and must be reproducible.
+- Remaining growth: migration lifecycle in real feature work.
 
----
+### 4) OAuth vs JWT
 
-### Q4) Room scoping and cleanup?
+- OAuth: identity/login delegation through provider (Google/GitHub).
+- JWT: token-based session/auth mechanism after login.
+- Remaining growth: secure refresh/revocation lifecycle in production patterns.
 
-**Your answer:**  
-Room scoping determines who receives events; cleanup prevents disconnected clients/state from accumulating.
+### 5) Redis role
 
-**Tutor feedback:**  
-Correct, with note that app-level state cleanup is critical.
-
----
-
-### Q5) Why single Prisma client?
-
-**Your answer:**  
-Not fully sure yet.
-
-**Tutor explanation:**  
-Main reason is connection management/stability; many instances can exhaust DB connections, especially during dev reloads/scaling.
+- Redis is strong for fast ephemeral state (presence/session/cache/pub-sub coordination).
+- PostgreSQL remains source of truth for durable business data.
 
 ---
 
-## Q&A Session 3 (Architecture Drill)
+## Architectural Truths Agreed For This Project
 
-### Prompt area (you initially said unsure)
-
-You were unsure about:
-
-- Postgres vs Redis responsibilities
-- Message source of truth order
-- Multi-instance behavior without Redis pub/sub
-- Presence edge cases
-
-### Tutor target model:
-
-- **Postgres**: durable truth (users, conversations, messages, memberships, last-seen)
-- **Redis**: ephemeral fast state (online set, pub/sub fan-out, cache/session)
-- **Safer message flow**: persist to DB first, then broadcast
-- **Without Redis pub/sub at scale**: cross-instance real-time delivery breaks
-- **Presence edge cases**: ghost-online on abrupt disconnect; multi-tab correctness issues
+- Durable records (users, conversations, messages, membership, last-seen) belong in PostgreSQL.
+- Ephemeral/high-speed coordination (online presence set, pub/sub fan-out, short-lived cache/session) belongs in Redis.
+- Safer message flow is: **persist in DB first -> then broadcast** to prevent phantom messages.
+- In multi-instance deployments, Redis pub/sub (and Socket.IO Redis adapter) is required for cross-instance real-time consistency.
+- Presence systems must handle disconnect and multi-tab edge cases to avoid false online/offline states.
 
 ---
 
-## Quick Validation Answers
+## Current Strengths
 
-### Q1) Why Redis for presence but not message history?
-
-**Your answer:**  
-Redis is good for short-term/session/cache; Postgres should store message history.
-
-**Tutor verdict:**  
-Correct.
-
-### Q2) Why DB first then broadcast?
-
-**Your answer:**  
-If DB write fails, users may see a message that does not exist in DB.
-
-**Tutor verdict:**  
-Correct.
+- Honest about unknowns (asks instead of guessing)
+- Good foundational reasoning on realtime concepts
+- Good early debugging instincts via data-flow tracing
+- Motivated to connect concept -> implementation directly
 
 ---
 
-## Current Understanding Summary
+## Current Growth Areas (Ongoing)
 
-### Strong areas
-
-- HTTP vs WebSocket core concept
-- Basic OAuth vs JWT distinction
-- Good intuitive debugging habit
-- Good reasoning honesty (“I don’t know” when needed)
-
-### Growth areas (Phase 00 focus)
-
-- Docker fundamentals and workflow
-- Prisma migrations + schema lifecycle
-- Redis mental model (ephemeral vs durable)
-- Socket.IO lifecycle and cleanup patterns
-- RTK/RTK Query practical usage
-- TypeScript strict-mode real project practice
-
----
-
-## Agreed Phase 00 Execution Order
-
-1. Monorepo folder skeleton
-2. TS/workspace strict baseline
-3. Docker Compose infra (Postgres + Redis)
-4. API foundation (`/health`, env validation, request IDs, sanitized errors)
-5. Socket.IO smoke lab (`ping/pong`, room join/leave, disconnect)
-6. Web shell + socket/API status UI
-7. Decision notes in docs
+- Docker fundamentals and day-to-day commands
+- Prisma schema + migration confidence
+- Redis command fluency and mental model depth
+- Socket lifecycle cleanup and reliability patterns
+- RTK Query practical data-flow patterns
+- TypeScript strict-mode confidence through repeated use
 
 ---
 
 ## Senior Mindset Commitments
 
-- Define success criteria before implementation
-- Prefer predictable architecture over clever shortcuts
-- Think in edge cases, not just happy path
-- Name for intent (`isConnected`, `hasValidSession`, etc.)
-- Ask “How would I test this?” before coding logic
+- Define success criteria before implementation.
+- Favor predictable architecture over clever shortcuts.
+- Design for maintainability, not just immediate functionality.
+- Think beyond happy path (network failures, invalid payloads, reconnects, race conditions).
+- Name code by intent (`isConnected`, `hasValidSession`, etc.).
+- Ask “How would this be tested?” before coding.
+- Evaluate explicit trade-offs (speed vs readability vs scalability).
+
+---
+
+## Debugging Protocol (Default)
+
+1. Reproduce consistently.
+2. Narrow scope (where data diverges from expectation).
+3. Form one hypothesis at a time.
+4. Instrument and validate (logs/devtools/network/event flow).
+5. Confirm fix and regression-check adjacent flows.
+6. Document root cause + prevention note.
+
+---
+
+## Reusable Phase Start Template
+
+Use this at the beginning of any new phase chat:
+
+- **Current phase:**
+- **Phase objective:**
+- **Definition of done:**
+- **New technologies in this phase:**
+- **Known risks:**
+- **Mini-labs required first:**
+- **Architecture constraints to preserve:**
+- **What I want to practice most in this phase (TS/Redux/Debugging/System design):**
+
+---
+
+## Reusable Phase End Reflection Template
+
+- What did I build?
+- What broke and why?
+- Which assumptions were wrong?
+- What did I learn technically?
+- What did I learn about engineering judgment?
+- What should be improved before the next phase?
+
+---
+
+## Update Log
+
+Keep this short and append-only.
+
+- Initial universal baseline created.
+- (Add dated entries as understanding evolves.)
